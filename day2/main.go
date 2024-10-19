@@ -22,12 +22,20 @@ func main() {
         "green": 13,
         "blue": 14,
     }
+
     var possGames []string
+    var powGames []int
     scanner := bufio.NewScanner(f)
     for scanner.Scan() {
         line := scanner.Text()
         fmt.Println(string(line))
 
+        minPoss := map[string]int {
+            "red": 0,
+            "green": 0,
+            "blue": 0,
+        }
+        
         isImpossible := false
         // split by colon to get (Game ID, Game Played)
         gParts := strings.Split(string(line), ": ")
@@ -52,6 +60,10 @@ func main() {
                     isImpossible = true
                 }
 
+                if minPoss[colorCube] < numCube {
+                    minPoss[colorCube] = numCube
+                }
+
             }
 
         }
@@ -60,6 +72,9 @@ func main() {
             id := strings.Replace(gameId, "Game ", "", 1)
             possGames = append(possGames, id)
         }
+        
+        powGames = append(powGames, minPoss["red"]*minPoss["green"]*minPoss["blue"])
+        
     }
 
     sum := 0
@@ -71,5 +86,11 @@ func main() {
         sum += id
     }
 
+    sumPower := 0
+    for i:=0; i<len(powGames); i++ {
+        sumPower += powGames[i]
+    }
+
     fmt.Println("Sum: ", sum)
+    fmt.Println("Sum Power: ", sumPower)
 }

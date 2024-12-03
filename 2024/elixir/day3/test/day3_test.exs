@@ -9,6 +9,6 @@ defmodule Day3Test do
 
   @tag task_id: 2
   test "puzzle input" do
-    assert Day3.run("input1.txt") == {170068701, -1}
+    assert Day3.run("input1.txt") == {170068701, 78683433}
   end
 end

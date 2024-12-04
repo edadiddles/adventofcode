@@ -1,12 +1,11 @@
 defmodule Day4 do
   def run(filename) do
-    letter_map = filename
+    filename
       |> File.read!
       |> String.trim
       |> String.split("\n")
       |> mapLines
-
-    checkXMAS(letter_map)
+      |> checks
   end
 
   def mapLines(lines) do
@@ -35,12 +34,17 @@ defmodule Day4 do
     end
   end
 
-  defp checkXMAS(letter_map) do
-    p1_cnt = r_checkXMAS(letter_map, {:x, nil, nil})
-    {p1_cnt, 0}
+  defp checks(letter_map) do
+    p1_sol = checkXMAS(letter_map)
+    p2_sol = checkCrossMAS(letter_map)
+    {p1_sol, p2_sol}
   end
 
-  defp r_checkXMAS(letter_map, {curr_letter, nil, nil}) do
+  defp checkXMAS(letter_map) do
+    r_checkXMAS(letter_map, {:x, nil, nil})
+  end
+
+  defp r_checkXMAS(letter_map, {_, nil, nil}) do
     letter_map 
       |> Map.fetch!(:x) 
       |> Enum.reduce(0, fn {x, y}, acc -> 
@@ -69,7 +73,25 @@ defmodule Day4 do
     end
   end
 
+  defp checkCrossMAS(letter_map) do
+    letter_map 
+      |> Map.fetch!(:a)
+      |> Enum.reduce(0, fn {x, y}, acc ->
+          cnt = diaganols()
+            |> Enum.reduce(0, fn {xd, yd}, acc -> r_checkXMAS(letter_map, {:x, {x+(-2*xd), y+(-2*yd)}, {xd, yd}}) + acc end)
+
+          case cnt do
+            2 -> 1 + acc
+            _ -> acc
+          end
+        end)
+  end
+
   defp directions do
-    [{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}]
+    [{0, 1}, {0, -1}, {1, 0}, {-1, 0} | diaganols()]
+  end
+
+  defp diaganols do
+    [{1, 1}, {-1, 1}, {1, -1}, {-1, -1}]
   end
 end

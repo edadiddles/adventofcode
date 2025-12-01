@@ -13,15 +13,21 @@ pw = 0
 dial = 50
 for datum in data:
     if datum[0] == 'L':
-        dial -= int(datum[1:])
-        while dial < 0:
-            pw += 1
-            dial += 100
+        d = int(datum[1:])
+        while d > 0:
+            dial -= 1
+            d -= 1
+            dial %= 100
+            if dial == 0:
+                pw += 1
     elif datum[0] == 'R':
-        dial += int(datum[1:])
-        while dial > 99:
-            pw += 1
-            dial -= 100
+        d = int(datum[1:])
+        while d > 0:
+            dial += 1
+            dial %= 100
+            d -= 1
+            if dial == 0:
+                pw += 1
     else:
         print("unknown data element")
 

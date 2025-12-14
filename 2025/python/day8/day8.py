@@ -61,7 +61,7 @@ def run(filename):
         nodes.append({"id": idx, "coords": coords, "edges": []})
 
     distances = find_distances(nodes)
-    circuit_sizes = determine_circuit_sizes(nodes, distances[0:10])
+    circuit_sizes = determine_circuit_sizes(nodes, distances[0:1000])
     print(f"Num Junctions: {sum(circuit_sizes)}")
     print(f"Num Circuits: {len(circuit_sizes)}")
     print(f"Circuit Sizes: {sorted(circuit_sizes, reverse=True)}")
